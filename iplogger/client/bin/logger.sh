@@ -9,4 +9,4 @@ ifconfig |
     tr ' ' '\n'$host | 
     awk '{print "http://0th.me/iplogger/?name='`hostname`'_"$0}' | 
     sed 's/&$//' |
-    xargs -n 1 curl > /dev/null
+    xargs curl > /dev/null

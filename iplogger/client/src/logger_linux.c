@@ -44,7 +44,6 @@ int main(int argc, char *argv[])
   int hostLen;
     
   while(1) {    
-
       fp = popen("ifconfig", "r");
       if (fp == NULL) {
         printf("Failed to run command\n" );

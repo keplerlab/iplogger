@@ -59,54 +59,58 @@ int get(char *server, char *path, char *name, char *ip){
 
 int main(int argc, char *argv[])
 {
-	PIP_ADAPTER_INFO pAdapterInfo;
-	PIP_ADAPTER_INFO pAdapter = NULL;
-	DWORD dwRetVal = 0;
-	UINT i;
+	while (1) {
 
-	ULONG ulOutBufLen = sizeof(IP_ADAPTER_INFO);
-	pAdapterInfo = (IP_ADAPTER_INFO *)MALLOC(sizeof(IP_ADAPTER_INFO));
-	if (pAdapterInfo == NULL) {
-		printf("Error allocating memory needed to call GetAdaptersinfo\n");
-		return 1;
-	}
+		PIP_ADAPTER_INFO pAdapterInfo;
+		PIP_ADAPTER_INFO pAdapter = NULL;
+		DWORD dwRetVal = 0;
+		UINT i;
 
-	if (GetAdaptersInfo(pAdapterInfo, &ulOutBufLen) == ERROR_BUFFER_OVERFLOW) {
-		FREE(pAdapterInfo);
-		pAdapterInfo = (IP_ADAPTER_INFO *)MALLOC(ulOutBufLen);
+		ULONG ulOutBufLen = sizeof(IP_ADAPTER_INFO);
+		pAdapterInfo = (IP_ADAPTER_INFO *)MALLOC(sizeof(IP_ADAPTER_INFO));
 		if (pAdapterInfo == NULL) {
 			printf("Error allocating memory needed to call GetAdaptersinfo\n");
 			return 1;
 		}
-	}
 
-	char szPath[128] = "", name[MAX_NAME];
-	WSADATA wsaData;
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
-	gethostname(szPath, sizeof(szPath));
-	WSACleanup();
-
-	char server[128] = DEFAULT_SERVER;
-	char path[128] = DEFAULT_PATH;
-
-	if (argc > 1) 
-		sscanf(argv[1], "http://%[^/]%s", server, path);
-
-	if ((dwRetVal = GetAdaptersInfo(pAdapterInfo, &ulOutBufLen)) == NO_ERROR) {
-		pAdapter = pAdapterInfo;
-		while (pAdapter) {
-			sprintf(name, "%s_%d", szPath, pAdapter->Index);
-			get(server, path, name, pAdapter->IpAddressList.IpAddress.String);
-			pAdapter = pAdapter->Next;
+		if (GetAdaptersInfo(pAdapterInfo, &ulOutBufLen) == ERROR_BUFFER_OVERFLOW) {
+			FREE(pAdapterInfo);
+			pAdapterInfo = (IP_ADAPTER_INFO *)MALLOC(ulOutBufLen);
+			if (pAdapterInfo == NULL) {
+				printf("Error allocating memory needed to call GetAdaptersinfo\n");
+				return 1;
+			}
 		}
-	}
-	else {
-		printf("GetAdaptersInfo failed with error: %d\n", dwRetVal);
-	}
-	if (pAdapterInfo)
-		FREE(pAdapterInfo);
 
-	system("pause");
+		char szPath[128] = "", name[MAX_NAME];
+		WSADATA wsaData;
+		WSAStartup(MAKEWORD(2, 2), &wsaData);
+		gethostname(szPath, sizeof(szPath));
+		WSACleanup();
+
+		char server[128] = DEFAULT_SERVER;
+		char path[128] = DEFAULT_PATH;
+
+		if (argc > 1)
+			sscanf(argv[1], "http://%[^/]%s", server, path);
+
+		if ((dwRetVal = GetAdaptersInfo(pAdapterInfo, &ulOutBufLen)) == NO_ERROR) {
+			pAdapter = pAdapterInfo;
+			while (pAdapter) {
+				sprintf(name, "%s_%d", szPath, pAdapter->Index);
+				get(server, path, name, pAdapter->IpAddressList.IpAddress.String);
+				pAdapter = pAdapter->Next;
+			}
+		}
+		else {
+			printf("GetAdaptersInfo failed with error: %d\n", dwRetVal);
+		}
+		if (pAdapterInfo)
+			FREE(pAdapterInfo);
+
+		//system("pause");
+		Sleep(1000 * 60 * 5);
+	}
 
 	return 0;
 }

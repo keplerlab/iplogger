@@ -1,6 +1,5 @@
-while true; do
 
-ifconfig | 
+/sbin/ifconfig | 
     tr -s ' ' '|' | 
     sed "s/|inet|addr:/ip=/g" | 
     grep -v  "^|" | 
@@ -11,8 +10,5 @@ ifconfig |
     tr ' ' '\n'$host | 
     awk '{print "http://0th.me/iplogger/?name='`hostname`'_"$0}' | 
     sed 's/&$//' |
-    xargs curl > /dev/null
+    xargs curl > /dev/null 2>&1
 
-sleep 5m
-
-done

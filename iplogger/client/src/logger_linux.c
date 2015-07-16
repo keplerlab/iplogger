@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
   char * server;
   int hostLen;
     
-  while(1) {    
+//  while(1) {    
       fp = popen("ifconfig", "r");
       if (fp == NULL) {
         printf("Failed to run command\n" );
@@ -61,8 +61,8 @@ int main(int argc, char *argv[])
 
       pclose(fp);
           
-      sleep(DEFAULT_INTERVAL);      
-  }
+//      sleep(DEFAULT_INTERVAL);      
+//  }
       
   return 0;
 }

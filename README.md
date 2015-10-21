@@ -1,2 +1,2 @@
 # keplertools
-Little snippets written by keplerwaasis
+Tools written by keplerwaasis

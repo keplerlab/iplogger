@@ -10,3 +10,8 @@ Schedule it to run after 5 minutes:
 **For Linux:** Add to crontab `*/5 * * * * <iplogger path> >> <log file>`
         
 **For Windows:** Add to Scheduler
+
+
+# License
+
+keplerlab projects typically use the MIT licenses for code. See specific projects to understand the license used.
